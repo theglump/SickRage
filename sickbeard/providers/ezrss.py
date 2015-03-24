@@ -36,7 +36,7 @@ from sickbeard import helpers
 class EZRSSProvider(generic.TorrentProvider):
     def __init__(self):
 
-        self.urls = {'base_url': 'https://www.ezrss.it/'}
+        self.urls = {'base_url': 'http://localhost:8080'}
 
         self.url = self.urls['base_url']
 
@@ -82,7 +82,7 @@ class EZRSSProvider(generic.TorrentProvider):
 
         params = {}
 
-        params['show_name'] = helpers.sanitizeSceneName(self.show.name, ezrss=True).replace('.', ' ').encode('utf-8')
+        params['show'] = helpers.sanitizeSceneName(self.show.name, ezrss=True).replace('.', ' ').encode('utf-8')
 
         if ep_obj.show.air_by_date or ep_obj.show.sports:
             params['season'] = str(ep_obj.airdate).split('-')[0]
@@ -100,7 +100,7 @@ class EZRSSProvider(generic.TorrentProvider):
         if not ep_obj:
             return params
 
-        params['show_name'] = helpers.sanitizeSceneName(self.show.name, ezrss=True).replace('.', ' ').encode('utf-8')
+        params['show'] = helpers.sanitizeSceneName(self.show.name, ezrss=True).replace('.', ' ').encode('utf-8')
 
         if self.show.air_by_date or self.show.sports:
             params['date'] = str(ep_obj.airdate)
@@ -119,7 +119,8 @@ class EZRSSProvider(generic.TorrentProvider):
         if search_params:
             params.update(search_params)
 
-        search_url = self.url + 'search/index.php?' + urllib.urlencode(params)
+        #search_url = 'http://localhost:8080/feed?provider=eztv&magnet=false&' + urllib.urlencode(params)
+        search_url = 'http://192.168.1.39:8080/betarss/feed?provider=eztv&magnet=false&' + urllib.urlencode(params)
 
         logger.log(u"Search string: " + search_url, logger.DEBUG)
 
@@ -169,10 +170,8 @@ class EZRSSCache(tvcache.TVCache):
         self.minTime = 15
 
     def _getRSSData(self):
-
-        rss_url = self.provider.url + 'feed/'
+        rss_url = self.provider.url + 'http://192.168.1.39:8080/betarss/last?provider=eztv&magnet=false'
         logger.log(self.provider.name + " cache update URL: " + rss_url, logger.DEBUG)
-
         return self.getRSSFeed(rss_url)
 
 provider = EZRSSProvider()
