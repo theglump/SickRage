@@ -120,7 +120,7 @@ class EZRSSProvider(generic.TorrentProvider):
             params.update(search_params)
 
         #search_url = 'http://localhost:8080/feed?provider=eztv&magnet=false&' + urllib.urlencode(params)
-        search_url = 'http://192.168.1.39:8080/betarss/feed?provider=eztv&magnet=false&' + urllib.urlencode(params)
+        search_url = 'http://192.168.1.39:8080/betarss/show?provider=eztv&magnet=true&mode=rss&' + urllib.urlencode(params)
 
         logger.log(u"Search string: " + search_url, logger.DEBUG)
 
@@ -170,7 +170,7 @@ class EZRSSCache(tvcache.TVCache):
         self.minTime = 15
 
     def _getRSSData(self):
-        rss_url = self.provider.url + 'http://192.168.1.39:8080/betarss/last?provider=eztv&magnet=false'
+        rss_url = self.provider.url + 'http://192.168.1.39:8080/betarss/latest?provider=eztv&magnet=true&mode=rss'
         logger.log(self.provider.name + " cache update URL: " + rss_url, logger.DEBUG)
         return self.getRSSFeed(rss_url)
 
